@@ -16,7 +16,7 @@ public class CicloMenstrual {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String emailUsuario; // Referencia al usuario externo
+    private String emailUsuario;    // Referencia al usuario externo
 
     private LocalDate fechaInicio;        // Día 1 del ciclo
     private int duracionCiclo;            // Ej: 28 días
