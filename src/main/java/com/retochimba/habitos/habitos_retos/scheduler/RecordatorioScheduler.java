@@ -18,7 +18,7 @@ public class RecordatorioScheduler {
     private final CicloMenstrualRepository repository;
     private final KafkaProducerService kafkaProducer;
 
-    @Scheduled(cron = "0 0 7 * * *") // ⏰ todos los días a las 7:00 am
+    @Scheduled(fixedRate = 60000) // ⏱️ cada 60 segundos (1 minuto)
     public void revisarFechasImportantes() {
         LocalDate hoy = LocalDate.now();
 
