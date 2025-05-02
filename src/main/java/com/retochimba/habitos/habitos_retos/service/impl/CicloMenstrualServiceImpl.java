@@ -4,7 +4,7 @@ import com.retochimba.habitos.habitos_retos.dto.CicloMenstrualDTO;
 import com.retochimba.habitos.habitos_retos.kafka.KafkaProducerService;
 import com.retochimba.habitos.habitos_retos.kafka.event.CicloRegistradoEvent;
 
-import model.CicloMenstrual;
+import com.retochimba.habitos.habitos_retos.model.CicloMenstrual;
 import com.retochimba.habitos.habitos_retos.repository.CicloMenstrualRepository;
 import com.retochimba.habitos.habitos_retos.service.CicloMenstrualService;
 

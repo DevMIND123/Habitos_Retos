@@ -1,10 +1,14 @@
 package com.retochimba.habitos.habitos_retos.controller;
 
 import com.retochimba.habitos.habitos_retos.dto.CicloMenstrualDTO;
-import model.CicloMenstrual;
+import com.retochimba.habitos.habitos_retos.security.JwtUtils;
+
+import com.retochimba.habitos.habitos_retos.model.CicloMenstrual;
 import com.retochimba.habitos.habitos_retos.service.CicloMenstrualService;
 
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,8 +21,16 @@ public class CicloMenstrualController {
 
     private final CicloMenstrualService service;
 
+    @Autowired
+    private JwtUtils jwtUtils;
     @PostMapping
-    public ResponseEntity<CicloMenstrual> registrar(@RequestBody CicloMenstrualDTO dto) {
+    public ResponseEntity<CicloMenstrual> registrarCiclo(
+            @RequestBody CicloMenstrualDTO dto,
+            @RequestHeader("Authorization") String token) {
+
+        String emailUsuario = jwtUtils.extraerEmail(token);
+        dto.setEmailUsuario(emailUsuario);
+
         return ResponseEntity.ok(service.registrarCiclo(dto));
     }
 

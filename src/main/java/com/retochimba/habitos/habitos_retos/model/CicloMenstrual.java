@@ -1,4 +1,4 @@
-package model;
+package com.retochimba.habitos.habitos_retos.model;
 
 import jakarta.persistence.*;
 import lombok.*;

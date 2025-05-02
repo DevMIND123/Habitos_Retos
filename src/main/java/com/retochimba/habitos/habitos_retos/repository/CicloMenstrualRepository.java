@@ -1,6 +1,6 @@
 package com.retochimba.habitos.habitos_retos.repository;
 
-import model.CicloMenstrual;
+import com.retochimba.habitos.habitos_retos.model.CicloMenstrual;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
