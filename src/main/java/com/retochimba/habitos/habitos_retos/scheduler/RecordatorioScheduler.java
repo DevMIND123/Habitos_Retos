@@ -20,6 +20,7 @@ public class RecordatorioScheduler {
 
     @Scheduled(fixedRate = 60000) // ⏱️ cada 60 segundos (1 minuto)
     public void revisarFechasImportantes() {
+        System.out.println("⏱️ Ejecutando tarea programada...");
         LocalDate hoy = LocalDate.now();
 
         List<CicloMenstrual> ciclos = repository.findAll();
@@ -28,23 +29,34 @@ public class RecordatorioScheduler {
             long diasParaMenstruacion = hoy.until(ciclo.getFechaProximaMenstruacion()).getDays();
             long diasParaOvulacion = hoy.until(ciclo.getFechaOvulacion()).getDays();
 
-            // Menstruación próxima
-            if (diasParaMenstruacion >= 0 && diasParaMenstruacion <= 3) {
+            System.out.println("🔎 Revisión de ciclo:");
+            System.out.println("📧 Usuario: " + ciclo.getEmailUsuario());
+            System.out.println("📅 Próxima menstruación: " + ciclo.getFechaProximaMenstruacion());
+            System.out.println("📅 Ovulación: " + ciclo.getFechaOvulacion());
+            System.out.println("📏 Días para menstruación: " + diasParaMenstruacion);
+            System.out.println("📏 Días para ovulación: " + diasParaOvulacion);
+
+            // ✅ Menstruación próxima (evita notificar si ya es hoy)
+            if (diasParaMenstruacion > 0 && diasParaMenstruacion <= 3) {
+                String mensaje = "🩸 Tu menstruación llegará en " + diasParaMenstruacion + " días.";
+                System.out.println("📨 Evento Kafka enviado: CicloRegistradoEvent(emailUsuario=" + ciclo.getEmailUsuario() + ", mensaje=" + mensaje + ")");
                 kafkaProducer.enviarEvento(
-                        new CicloRegistradoEvent(
-                                ciclo.getEmailUsuario(),
-                                "🩸 Tu menstruación llegará en " + diasParaMenstruacion + " días."
-                        )
+                    new CicloRegistradoEvent(
+                        ciclo.getEmailUsuario(),
+                        mensaje
+                    )
                 );
             }
 
-            // Ovulación próxima
-            if (diasParaOvulacion >= 0 && diasParaOvulacion <= 3) {
+            // ✅ Ovulación próxima (evita notificar si ya es hoy)
+            if (diasParaOvulacion > 0 && diasParaOvulacion <= 3) {
+                String mensaje = "🌸 Se aproxima tu ovulación en " + diasParaOvulacion + " días.";
+                System.out.println("📨 Evento Kafka enviado: CicloRegistradoEvent(emailUsuario=" + ciclo.getEmailUsuario() + ", mensaje=" + mensaje + ")");
                 kafkaProducer.enviarEvento(
-                        new CicloRegistradoEvent(
-                                ciclo.getEmailUsuario(),
-                                "🌸 Se aproxima tu ovulación en " + diasParaOvulacion + " días."
-                        )
+                    new CicloRegistradoEvent(
+                        ciclo.getEmailUsuario(),
+                        mensaje
+                    )
                 );
             }
         }
