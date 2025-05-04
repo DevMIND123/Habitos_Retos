@@ -2,9 +2,10 @@ package com.retochimba.habitos.habitos_retos.service;
 
 import com.retochimba.habitos.habitos_retos.dto.AlimentacionDTO;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface AlimentacionService {
     AlimentacionDTO crearAlimentacion(AlimentacionDTO dto);
-    Optional<AlimentacionDTO> obtenerPorEmail(String emailUsuario);
+    List<AlimentacionDTO> obtenerTodosPorEmail(String emailUsuario);
 }

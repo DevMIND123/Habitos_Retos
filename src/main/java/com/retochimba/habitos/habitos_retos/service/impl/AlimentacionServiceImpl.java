@@ -7,6 +7,7 @@ import com.retochimba.habitos.habitos_retos.service.AlimentacionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -34,8 +35,8 @@ public class AlimentacionServiceImpl implements AlimentacionService {
     }
 
     @Override
-    public Optional<AlimentacionDTO> obtenerPorEmail(String emailUsuario) {
-        return alimentacionRepository.findByEmailUsuario(emailUsuario)
+    public List<AlimentacionDTO> obtenerTodosPorEmail(String emailUsuario) {
+        return alimentacionRepository.findByEmailUsuario(emailUsuario).stream()
                 .map(al -> AlimentacionDTO.builder()
                         .id(al.getId())
                         .emailUsuario(al.getEmailUsuario())
@@ -44,6 +45,8 @@ public class AlimentacionServiceImpl implements AlimentacionService {
                         .caloriasConsumidasHoy(al.getCaloriasConsumidasHoy())
                         .fechaInicio(al.getFechaInicio())
                         .fechaFin(al.getFechaFin())
-                        .build());
+                        .build())
+                .toList();
     }
+
 }

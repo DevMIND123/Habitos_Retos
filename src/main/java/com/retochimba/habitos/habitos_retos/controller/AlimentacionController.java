@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/alimentacion")
 @RequiredArgsConstructor
@@ -20,9 +22,12 @@ public class AlimentacionController {
     }
 
     @GetMapping("/por-email/{email}")
-    public ResponseEntity<AlimentacionDTO> obtenerPorEmail(@PathVariable String email) {
-        return alimentacionService.obtenerPorEmail(email)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<List<AlimentacionDTO>> obtenerPorEmail(@PathVariable String email) {
+        List<AlimentacionDTO> lista = alimentacionService.obtenerTodosPorEmail(email);
+        if (lista.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(lista);
     }
+
 }
