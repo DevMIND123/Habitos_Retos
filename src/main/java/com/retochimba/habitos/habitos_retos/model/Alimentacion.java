@@ -24,6 +24,12 @@ public class Alimentacion {
     private String emailUsuario;
 
     private String objetivo; // "Perder peso", "Ganar masa", "Mantener peso"
+
+    private float peso;
+    
+    private float altura;
+
+    private float Imc;
     
     private Integer caloriasObjetivoDiarias;
 
