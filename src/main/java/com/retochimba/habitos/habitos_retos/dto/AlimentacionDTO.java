@@ -13,6 +13,9 @@ public class AlimentacionDTO {
     private Long id;
     private String emailUsuario;
     private String objetivo;
+    private float peso; 
+    private float altura;
+    private float Imc;
     private Integer caloriasObjetivoDiarias;
     private Integer caloriasConsumidasHoy;
     private LocalDate fechaInicio;
