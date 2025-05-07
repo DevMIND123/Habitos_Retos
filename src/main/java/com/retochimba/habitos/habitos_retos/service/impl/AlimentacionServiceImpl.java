@@ -68,6 +68,8 @@ public class AlimentacionServiceImpl implements AlimentacionService {
                         .caloriasConsumidasHoy(al.getCaloriasConsumidasHoy())
                         .fechaInicio(al.getFechaInicio())
                         .fechaFin(al.getFechaFin())
+                        .imc(al.getImc())
+
                         .build())
                 .toList();
     }

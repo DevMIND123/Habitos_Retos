@@ -27,6 +27,7 @@ public class AlimentacionController {
         if (lista.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
+
         return ResponseEntity.ok(lista);
     }
 
