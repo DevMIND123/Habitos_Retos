@@ -16,43 +16,47 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class RegistroComidaServiceImpl implements RegistroComidaService {
 
-    private final RegistroComidaRepository comidaRepository;
-    private final AlimentacionRepository alimentacionRepository;
+        private final RegistroComidaRepository comidaRepository;
+        private final AlimentacionRepository alimentacionRepository;
 
-    @Override
-    public RegistroComidaDTO registrarComida(Long alimentacionId, RegistroComidaDTO dto) {
-        Alimentacion alimentacion = alimentacionRepository.findById(alimentacionId)
-                .orElseThrow(() -> new RuntimeException("Alimentación no encontrada"));
+        @Override
+        public RegistroComidaDTO registrarComida(Long alimentacionId, RegistroComidaDTO dto) {
+                if (dto.getCalorias() < 0) {
+                        throw new IllegalArgumentException("Las calorías no pueden ser negativas");
+                }
+                Alimentacion alimentacion = alimentacionRepository.findById(alimentacionId)
+                                .orElseThrow(() -> new RuntimeException("Alimentación no encontrada"));
 
-        RegistroComida comida = RegistroComida.builder()
-                .nombre(dto.getNombre())
-                .calorias(dto.getCalorias())
-                .fechaHoraRegistro(dto.getFechaHoraRegistro())
-                .habitoAlimentacion(alimentacion)
-                .build();
+                RegistroComida comida = RegistroComida.builder()
+                                .nombre(dto.getNombre())
+                                .calorias(dto.getCalorias())
+                                .fechaHoraRegistro(dto.getFechaHoraRegistro())
+                                .habitoAlimentacion(alimentacion)
+                                .build();
 
-        comidaRepository.save(comida);
+                // Guardar y obtener la comida con ID asignado
+                RegistroComida comidaGuardada = comidaRepository.save(comida);
 
-        // Actualizar calorías consumidas
-        alimentacion.setCaloriasConsumidasHoy(
-                alimentacion.getCaloriasConsumidasHoy() + dto.getCalorias()
-        );
-        alimentacionRepository.save(alimentacion);
+                // Actualizar calorías consumidas
+                alimentacion.setCaloriasConsumidasHoy(
+                                alimentacion.getCaloriasConsumidasHoy() + dto.getCalorias());
+                alimentacionRepository.save(alimentacion);
 
-        dto.setId(comida.getId());
-        return dto;
-    }
+                // Retornar DTO con ID ya seteado
+                dto.setId(comidaGuardada.getId());
+                return dto;
+        }
 
-    @Override
-    public List<RegistroComidaDTO> obtenerComidasPorAlimentacion(Long alimentacionId) {
-        return comidaRepository.findByHabitoAlimentacionId(alimentacionId)
-                .stream()
-                .map(comida -> RegistroComidaDTO.builder()
-                        .id(comida.getId())
-                        .nombre(comida.getNombre())
-                        .calorias(comida.getCalorias())
-                        .fechaHoraRegistro(comida.getFechaHoraRegistro())
-                        .build())
-                .collect(Collectors.toList());
-    }
+        @Override
+        public List<RegistroComidaDTO> obtenerComidasPorAlimentacion(Long alimentacionId) {
+                return comidaRepository.findByHabitoAlimentacionId(alimentacionId)
+                                .stream()
+                                .map(comida -> RegistroComidaDTO.builder()
+                                                .id(comida.getId())
+                                                .nombre(comida.getNombre())
+                                                .calorias(comida.getCalorias())
+                                                .fechaHoraRegistro(comida.getFechaHoraRegistro())
+                                                .build())
+                                .collect(Collectors.toList());
+        }
 }
