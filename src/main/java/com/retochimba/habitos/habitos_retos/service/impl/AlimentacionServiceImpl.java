@@ -17,43 +17,47 @@ public class AlimentacionServiceImpl implements AlimentacionService {
 
     @Override
     public AlimentacionDTO crearAlimentacion(AlimentacionDTO dto) {
-        dto.setImc((float) (dto.getPeso() / Math.pow(dto.getAltura(), 2)));
-        float imc = dto.getImc();
+        // Convertimos altura a metros antes de calcular IMC
+        float alturaEnMetros = dto.getAltura() / 100f;
+        float imc = dto.getPeso() / (alturaEnMetros * alturaEnMetros);
+        dto.setImc(imc);
+
         String objetivo;
         float caloriasDiarias;
-    
+
         if (imc < 18.5) {
             objetivo = "Ganar masa";
-            caloriasDiarias = dto.getPeso() * 37f; // promedio entre 35-40
+            caloriasDiarias = dto.getPeso() * 37f;
         } else if (imc < 25) {
             objetivo = "Mantener peso";
             caloriasDiarias = dto.getPeso() * 30f;
         } else {
             objetivo = "Perder peso";
-            caloriasDiarias = dto.getPeso() * 22f; // promedio entre 20-25
+            caloriasDiarias = dto.getPeso() * 22f;
         }
-    
+
         dto.setObjetivo(objetivo);
-        dto.setCaloriasObjetivoDiarias(Math.round(caloriasDiarias)); // redondeamos a entero si es float
-    
+        dto.setCaloriasObjetivoDiarias(Math.round(caloriasDiarias));
+
         Alimentacion alimentacion = Alimentacion.builder()
                 .emailUsuario(dto.getEmailUsuario())
                 .objetivo(dto.getObjetivo())
                 .peso(dto.getPeso())
                 .altura(dto.getAltura())
+                .imc(dto.getImc())  // Asegúrate de guardar el IMC en la entidad
                 .caloriasObjetivoDiarias(dto.getCaloriasObjetivoDiarias())
                 .caloriasConsumidasHoy(0)
                 .fechaInicio(dto.getFechaInicio())
                 .fechaFin(dto.getFechaFin())
                 .build();
-    
+
         alimentacion = alimentacionRepository.save(alimentacion);
-    
+
         dto.setId(alimentacion.getId());
-        dto.setCaloriasConsumidasHoy(0); // inicializado
+        dto.setCaloriasConsumidasHoy(0);
         return dto;
     }
-    
+
 
     @Override
     public List<AlimentacionDTO> obtenerTodosPorEmail(String emailUsuario) {
