@@ -1,0 +1,15 @@
+services:
+  castle-mock-habitos-retos:
+    image: castlemock/castlemock
+    container_name: castlemock-habitos-retos
+    ports:
+      - "8011:8080"
+    volumes:
+      - ./data/habitos:/root/.castlemock
+    networks:
+      - devNetworkArq
+    restart: unless-stopped
+
+networks:
+  devNetworkArq:
+    external: true

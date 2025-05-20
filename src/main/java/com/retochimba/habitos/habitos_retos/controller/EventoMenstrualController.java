@@ -11,7 +11,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping("/evento-menstrual")
+@RequestMapping("/api.retochimba.com/evento-menstrual")
 @RequiredArgsConstructor
 public class EventoMenstrualController {
 
