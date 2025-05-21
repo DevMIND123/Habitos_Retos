@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/ciclos")
+@RequestMapping("/api.retochimba.com/ciclos")
 @RequiredArgsConstructor
 public class CicloMenstrualController {
 
