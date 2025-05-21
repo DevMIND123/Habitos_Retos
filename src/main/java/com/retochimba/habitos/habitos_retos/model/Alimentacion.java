@@ -24,6 +24,13 @@ public class Alimentacion {
     private String emailUsuario;
 
     private String objetivo; // "Perder peso", "Ganar masa", "Mantener peso"
+
+    @Column(nullable = true)
+    private float peso;
+    @Column(nullable = true)
+    private float altura;
+    @Column(nullable = true)
+    private float imc;
     
     private Integer caloriasObjetivoDiarias;
 

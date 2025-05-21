@@ -39,4 +39,10 @@ public class EmbarazoService {
                         .build()
         );
     }
+
+    public Embarazo obtenerUltimoEmbarazoPorEmail(String emailUsuario) {
+    return repository.findTopByEmailUsuarioOrderByFechaInicioDesc(emailUsuario)
+            .orElse(null);
+    }
+
 }

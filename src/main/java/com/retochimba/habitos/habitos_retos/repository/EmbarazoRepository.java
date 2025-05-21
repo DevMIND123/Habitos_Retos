@@ -7,4 +7,5 @@ import java.util.Optional;
 
 public interface EmbarazoRepository extends JpaRepository<Embarazo, Long> {
     Optional<Embarazo> findByEmailUsuario(String emailUsuario);
+    Optional<Embarazo> findTopByEmailUsuarioOrderByFechaInicioDesc(String emailUsuario);
 }
