@@ -24,9 +24,9 @@ services:
     env_file:
       - .env
     networks:
-      - devNetworkArq
+      - prodNetworkArq
     restart: unless-stopped
 
 networks:
-  devNetworkArq:
+  prodNetworkArq:
     external: true

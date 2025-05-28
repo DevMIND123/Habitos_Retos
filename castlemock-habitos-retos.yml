@@ -7,9 +7,9 @@ services:
     volumes:
       - ./data/habitos:/root/.castlemock
     networks:
-      - devNetworkArq
+      - prodNetworkArq
     restart: unless-stopped
 
 networks:
-  devNetworkArq:
+  prodNetworkArq:
     external: true
