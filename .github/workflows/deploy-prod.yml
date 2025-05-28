@@ -3,28 +3,38 @@ name: Production Deploy
 on:
   push:
     branches: [main]
-  pull_request:
+  pull_request: # delete later
     branches: [main]
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+      - name: Build with Maven
+        run: mvn -B package --file pom.xml
 
-    - name: Set up SSH agent
-      uses: webfactory/ssh-agent@v0.9.0
-      with:
-        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY_VM3 }}
+  deploy:
+    runs-on: self-hosted
+    needs: build
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-    - name: Deploy Spring Boot Auth microservice to VM
-      run: |
-        ssh -o StrictHostKeyChecking=no your_user@your_server_ip << 'EOF'
-          cd /path/to/your/springboot-service
-          git pull origin $(git rev-parse --abbrev-ref HEAD)
+      - name: Copy .env to runner workspace
+        run: cp /home/arquitectura/Habitos_Retos/.env $GITHUB_WORKSPACE/
+
+      - name: Build and deploy microservice
+        working-directory: ${{ github.workspace }}
+        run: |
           mvn clean package -DskipTests
+          docker-compose down
           docker-compose build --no-cache
           docker-compose up -d
-        EOF
